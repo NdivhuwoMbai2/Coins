@@ -1,5 +1,8 @@
-public interface ICoin
+namespace Coins.Models
 {
-    decimal Amount { get; set; }
-    decimal Volume { get; set; }
+    public interface ICoin
+    {
+        decimal Amount { get; set; }
+        decimal Volume { get; set; }
+    }
 }

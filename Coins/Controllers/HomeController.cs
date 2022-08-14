@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-namespace Coins.Controllers;
-public class HomeController : Controller
+namespace Coins.Controllers
 {
-    public IActionResult Index()
+    public class HomeController : Controller
     {
-        return new RedirectResult("/swagger");
+        public IActionResult Index()
+        {
+            return new RedirectResult("/swagger");
+        }
     }
 }
