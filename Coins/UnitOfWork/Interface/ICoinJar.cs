@@ -1,6 +1,6 @@
 
 namespace Coins.UnitOfWork;
-public interface ICoinUoW
+public interface ICoinJar
 {  
     /// <summary>
     /// Add Coins
@@ -12,4 +12,8 @@ public interface ICoinUoW
     /// </summary> 
     /// <returns>Returns sum of coins</returns>
     Task<decimal> GetTotalAmount();
+    /// <summary>
+    /// Reset the coins.
+    /// </summary>  
+    void Reset();
 }

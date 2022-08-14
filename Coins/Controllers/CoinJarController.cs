@@ -10,12 +10,12 @@ public class CoinJarController : ControllerBase
 {
     private readonly ILogger<CoinJarController> _logger;
     private readonly IMemoryCache _cache;
-    private readonly ICoinUoW _coinUoW;
-    public CoinJarController(ILogger<CoinJarController> logger, IMemoryCache cache, ICoinUoW coinUoW)
+    private readonly ICoinJar _coinJar;
+    public CoinJarController(ILogger<CoinJarController> logger, IMemoryCache cache, ICoinJar coinJar)
     {
         _cache = cache ?? throw new ArgumentNullException(nameof(cache));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _coinUoW = coinUoW ?? throw new ArgumentNullException(nameof(coinUoW));
+        _coinJar = coinJar ?? throw new ArgumentNullException(nameof(coinJar));
     }
 
     [HttpPost]
@@ -24,7 +24,7 @@ public class CoinJarController : ControllerBase
     {
         try
         {
-            var result = await _coinUoW.AddCoinAsync(coin);
+            var result = await _coinJar.AddCoinAsync(coin);
             if (result)
             {
                 return Ok(result);
@@ -48,8 +48,13 @@ public class CoinJarController : ControllerBase
     {
         try
         {
-          var result = await _coinUoW.GetTotalAmount();
-          return Ok(result);
+            var result = await _coinJar.GetTotalAmount();
+            if (string.IsNullOrEmpty(result.ToString()))
+            {
+                _logger.LogError("'{MethodName}'. Error Message: '{Message}'", nameof(GetTotalAmount), "Total Amount not found");
+                return NotFound();
+            }
+            return Ok(result);
         }
         catch (Exception exception)
         {
@@ -59,11 +64,12 @@ public class CoinJarController : ControllerBase
     }
     [HttpGet]
     [Route("reset")]
-    public async Task<IActionResult> Reset()
+    public IActionResult Reset()
     {
         try
         {
-            throw new NotImplementedException();
+            _coinJar.Reset();
+            return Ok();
         }
         catch (Exception exception)
         {

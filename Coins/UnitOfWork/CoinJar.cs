@@ -3,11 +3,11 @@ using Coins.Repository;
 using Coins.Repository.Interfaces;
 
 namespace Coins.UnitOfWork;
-public class CoinUoW : ICoinUoW
+public class CoinJar : ICoinJar
 {
     private readonly ILogger _logger;
     private readonly ICoinRepository _coinRepository;
-    public CoinUoW(ILogger<CoinUoW> logger, ICoinRepository coinRepository)
+    public CoinJar(ILogger<CoinJar> logger, ICoinRepository coinRepository)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _coinRepository = coinRepository ?? throw new ArgumentNullException(nameof(coinRepository));
@@ -38,5 +38,18 @@ public class CoinUoW : ICoinUoW
             _logger.LogError(exception, "Exception occurred when trying to add coin. Message: '{Message}'", exception.Message);
             throw new Exception($"Exception on '{nameof(GetTotalAmount)}'. Error Message: '{exception.Message}'");
         }
+    }
+
+    public void Reset()
+    {
+        try
+        {
+            _coinRepository.Reset();
+        }
+        catch (Exception exception)
+        { 
+            _logger.LogError(exception, "Exception occurred resetting coins. Message: '{Message}'", exception.Message);
+            throw new Exception($"Exception on '{nameof(GetTotalAmount)}'. Error Message: '{exception.Message}'");
+        } 
     }
 }
