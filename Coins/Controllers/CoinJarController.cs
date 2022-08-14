@@ -27,7 +27,7 @@ public class CoinJarController : ControllerBase
             var result = await _coinUoW.AddCoinAsync(coin);
             if (result)
             {
-                return new JsonResult(result);
+                return Ok(result);
             }
             else
             {
@@ -48,7 +48,8 @@ public class CoinJarController : ControllerBase
     {
         try
         {
-            throw new NotImplementedException();
+          var result = await _coinUoW.GetTotalAmount();
+          return Ok(result);
         }
         catch (Exception exception)
         {

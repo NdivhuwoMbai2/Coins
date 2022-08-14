@@ -26,4 +26,17 @@ public class CoinUoW : ICoinUoW
             return result;
         }
     }
+
+    public async Task<decimal> GetTotalAmount()
+    { 
+        try
+        {
+            return await _coinRepository.GetTotalAmount();
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Exception occurred when trying to add coin. Message: '{Message}'", exception.Message);
+            throw new Exception($"Exception on '{nameof(GetTotalAmount)}'. Error Message: '{exception.Message}'");
+        }
+    }
 }

@@ -11,7 +11,12 @@ public class CoinRepository : ICoinRepository
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
     }
-    public Task<bool> AddCoinAsync(Coin coin)
+    public async Task<bool> AddCoinAsync(Coin coin)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<decimal> GetTotalAmount()
     {
         throw new NotImplementedException();
     }
