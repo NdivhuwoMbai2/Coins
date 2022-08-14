@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.OpenApi.Models;
 using Serilog;
 try
@@ -13,7 +15,7 @@ try
     {
         options.SwaggerDoc("v1", new OpenApiInfo
         {
-            Version = "v1",
+            Version = "v1.0",
             Title = "Coin Jar API",
             Description = "Simple application for counting the collected coins",
             TermsOfService = new Uri("https://example.com/terms"),
@@ -29,8 +31,15 @@ try
             }
         });
     });
+    builder.Services.AddApiVersioning(options =>
+    {
+        options.AssumeDefaultVersionWhenUnspecified = true;
+        options.DefaultApiVersion = new ApiVersion(1, 0);
+        options.ReportApiVersions = true;
+        options.ApiVersionReader = new HeaderApiVersionReader("X-Api-Version");
+    });
     // Register CORS features
-    builder.Services.AddCors(options => options.AddPolicy("KnownCORS", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader())); 
+    builder.Services.AddCors(options => options.AddPolicy("KnownCORS", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
     var app = builder.Build();
 

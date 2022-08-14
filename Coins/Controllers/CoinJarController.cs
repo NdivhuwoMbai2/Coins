@@ -5,7 +5,8 @@ using Microsoft.Extensions.Caching.Memory;
 namespace Coins.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/{version:apiVersion}/[controller]")]
 public class CoinJarController : ControllerBase
 {
     private readonly ILogger<CoinJarController> _logger;
