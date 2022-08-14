@@ -1,3 +1,4 @@
+using Coins.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.OpenApi.Models;
@@ -6,8 +7,7 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    // Add services to the container.
-
+    // Add services to the container. 
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
@@ -40,7 +40,12 @@ try
     });
     // Register CORS features
     builder.Services.AddCors(options => options.AddPolicy("KnownCORS", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
-
+   
+    // Register memory cache
+    builder.Services.AddMemoryCache();
+    // Setup DI dependencies for application
+    builder.Services.ConfigureServices(builder.Configuration);
+    
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
