@@ -6,7 +6,7 @@ public interface ICoinJar
     /// Add Coins
     /// </summary> 
     /// <returns>Returns false if it fails or true if valid</returns>
-    Task<bool> AddCoinAsync(Coin coin);
+    void AddCoinAsync(Coin coin);
     /// <summary>
     /// Get the total amount of our coins
     /// </summary> 

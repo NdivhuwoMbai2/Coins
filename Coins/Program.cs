@@ -1,6 +1,7 @@
 using Coins.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.OpenApi.Models;
 using Serilog;
 try
@@ -40,7 +41,7 @@ try
     });
     // Register CORS features
     builder.Services.AddCors(options => options.AddPolicy("KnownCORS", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
-   
+    
     // Register memory cache
     builder.Services.AddMemoryCache();
     // Setup DI dependencies for application

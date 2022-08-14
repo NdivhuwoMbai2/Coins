@@ -25,16 +25,8 @@ public class CoinJarController : ControllerBase
     {
         try
         {
-            var result = await _coinJar.AddCoinAsync(coin);
-            if (result)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return StatusCode(304, new { message = "An error occurred while adding a coin" });
-
-            }
+            _coinJar.AddCoinAsync(coin); 
+            return Ok();
         }
         catch (Exception exception)
         {

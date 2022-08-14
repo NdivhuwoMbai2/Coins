@@ -13,25 +13,23 @@ public class CoinJar : ICoinJar
         _coinRepository = coinRepository ?? throw new ArgumentNullException(nameof(coinRepository));
     }
 
-    public async Task<bool> AddCoinAsync(Coin coin)
+    public void AddCoinAsync(Coin coin)
     {
-        var result = false;
         try
         {
-            return await _coinRepository.AddCoinAsync(coin);
+            _coinRepository.AddCoinAsync(coin);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Exception occurred when trying to add coin. Message: '{Message}'", ex.Message);
-            return result;
         }
     }
 
     public async Task<decimal> GetTotalAmount()
-    { 
+    {
         try
         {
-            return await _coinRepository.GetTotalAmount();
+            return await Task.Run(() =>_coinRepository.GetTotalAmount());
         }
         catch (Exception exception)
         {
@@ -47,9 +45,9 @@ public class CoinJar : ICoinJar
             _coinRepository.Reset();
         }
         catch (Exception exception)
-        { 
+        {
             _logger.LogError(exception, "Exception occurred resetting coins. Message: '{Message}'", exception.Message);
             throw new Exception($"Exception on '{nameof(GetTotalAmount)}'. Error Message: '{exception.Message}'");
-        } 
+        }
     }
 }
