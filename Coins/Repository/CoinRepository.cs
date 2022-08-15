@@ -1,6 +1,6 @@
 using Coins.Models;
 using Coins.Repository.Interfaces;
-using Microsoft.Extensions.Caching.Memory; 
+using Microsoft.Extensions.Caching.Memory;
 namespace Coins.Repository
 {
     public class CoinRepository : ICoinRepository
@@ -42,25 +42,32 @@ namespace Coins.Repository
                     _memoryCache.Set(coinListCacheKey, coin.Amount, cacheEntryOptions);
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-
-                throw;
+                throw new Exception($"Exception on '{nameof(AddCoinAsync)}'. Error Message: '{exception.Message}'", exception);
             }
-         
+
         }
         public decimal GetTotalAmount()
         {
-            _logger.Log(LogLevel.Information, "Trying to get total amount coins");
-            if (_memoryCache.TryGetValue(coinListCacheKey, out decimal TotalCoins))
+            try
             {
-                return TotalCoins;
+                _logger.Log(LogLevel.Information, "Trying to get total amount coins");
+                if (_memoryCache.TryGetValue(coinListCacheKey, out decimal TotalCoins))
+                {
+                    return TotalCoins;
+                }
+                else
+                {
+                    _logger.Log(LogLevel.Warning, "No totalCoins found");
+                    throw new Exception($"Exception on GetTotalAmount'. Error Message: No totalCoins found'");
+                }
             }
-            else
+            catch (Exception exception)
             {
-                _logger.Log(LogLevel.Warning, "No totalCoins found");
-                throw new Exception($"Exception on GetTotalAmount'. Error Message: No totalCoins found'");
+                throw new Exception($"Exception on '{nameof(GetTotalAmount)}'. Error Message: '{exception.Message}'", exception);
             }
+
         }
 
         public void Reset()
@@ -70,6 +77,10 @@ namespace Coins.Repository
             {
                 _memoryCache.Remove(coinListCacheKey);
                 _logger.Log(LogLevel.Information, "Removed total coin amount");
+            }
+            else
+            {
+                _logger.Log(LogLevel.Information, "Total Amount not found"); 
             }
         }
 
