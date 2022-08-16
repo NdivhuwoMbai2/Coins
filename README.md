@@ -18,4 +18,6 @@ To run this project, install it locally using npm:
 $ cd ../coins
 $ dotnet build
 $ dotnet run
+$ listening on: http://localhost:5038 and listening on: https://localhost:7260
+
 ```
