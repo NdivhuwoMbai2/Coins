@@ -6,7 +6,6 @@ using Coins.UnitOfWork;
 
 namespace Coins.Extensions
 {
-
     public static class WebApplicationExtensions
     {
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)

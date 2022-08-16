@@ -12,8 +12,7 @@ namespace Coins.UnitOfWork
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _coinRepository = coinRepository ?? throw new ArgumentNullException(nameof(coinRepository));
-        }
-
+        } 
         public void AddCoinAsync(Coin coin)
         {
             try
@@ -24,8 +23,7 @@ namespace Coins.UnitOfWork
             {
                 _logger.LogError(ex, "Exception occurred when trying to add coin. Message: '{Message}'", ex.Message);
             }
-        }
-
+        } 
         public async Task<decimal> GetTotalAmount()
         {
             try
@@ -37,8 +35,7 @@ namespace Coins.UnitOfWork
                 _logger.LogError(exception, "Exception occurred when trying to add coin. Message: '{Message}'", exception.Message);
                 throw new Exception($"Exception on '{nameof(GetTotalAmount)}'. Error Message: '{exception.Message}'");
             }
-        }
-
+        } 
         public void Reset()
         {
             try
