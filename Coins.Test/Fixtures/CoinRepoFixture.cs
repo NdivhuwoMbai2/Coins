@@ -10,9 +10,9 @@ namespace Coins.Test.Fixtures
 {
     internal class CoinRepoFixture
     {
-        public Mock<IMemoryCache> MockImemoryCache { get; } = new();
+        public IMemoryCache? _memoryCache;
 
-        private IConfiguration _configuration;
+        private IConfiguration? _configuration;
 
         private const string coinListCacheKey = "coinListCacheKey";
 
@@ -20,38 +20,50 @@ namespace Coins.Test.Fixtures
         public CoinRepoFixture GivenConfiguration(Dictionary<string, string> appSettings = null)
         {
             var builder = new ConfigurationBuilder();
-            builder.AddInMemoryCollection(appSettings); 
+            builder.AddInMemoryCollection(appSettings);
+            _memoryCache = BuildMemoCache();
             _configuration = builder.Build();
             return this;
         }
-        public IMemoryCache GetSystemUnderTest()
+        public IMemoryCache BuildMemoCache()
         {
+            //looks like i cannot mock the memocache .. using this route instead
             var services = new ServiceCollection();
             services.AddMemoryCache();
-            var serviceProvider = services.BuildServiceProvider();  
-            return serviceProvider.GetService<IMemoryCache>() ?? throw new ArgumentNullException(nameof(IMemoryCache));
+            var serviceProvider = services.BuildServiceProvider();
+            return serviceProvider.GetService<IMemoryCache>() ?? throw new ArgumentNullException(nameof(IMemoryCache)); ;
         }
         public CoinRepoFixture AddCoins(Coin coin)
         {
-            MockImemoryCache.Setup(x => x.Set(coinListCacheKey, coin.Amount));
+            _memoryCache.Set(coinListCacheKey, coin.Amount);
             return this;
         }
 
+        public IMemoryCache GetMemoryCache(decimal expectedValue)
+        {
+            _memoryCache.TryGetValue(coinListCacheKey, out expectedValue);
+            return _memoryCache;
+        }
 
         #endregion
 
         #region Verify
-        public CoinRepoFixture VerifyGetChainAsyncWasCalled(Times timesCalled, Coin coin)
+        public decimal GetCoinsTotal()
         {
-            MockImemoryCache.Verify(x => x.Set(It.IsAny<string>(), coin.Amount), timesCalled);
-            return this;
+            _memoryCache.TryGetValue(coinListCacheKey, out decimal TotalVal);
+            return TotalVal;
+        }
+
+        public void Reset()
+        {
+            _memoryCache.Remove(coinListCacheKey); 
         }
         #endregion
+
         public CoinRepository BuildCoinRepository()
-        {
-            var res = GetSystemUnderTest();
+        { 
             if (_configuration == null) throw new ArgumentNullException(nameof(_configuration), "Configurations has not been setup for this test!");
-            return new Repository.CoinRepository(new NullLogger<CoinRepository>(),res);
+            return new Repository.CoinRepository(new NullLogger<CoinRepository>(), _memoryCache);
         }
 
     }

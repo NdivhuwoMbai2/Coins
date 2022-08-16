@@ -24,7 +24,6 @@ namespace Coins.Repository
                         .SetPriority(CacheItemPriority.Normal)
                         .SetSize(1024);
         }
-
         public void AddCoinAsync(Coin coin)
         {
             try
@@ -46,7 +45,6 @@ namespace Coins.Repository
             {
                 throw new Exception($"Exception on '{nameof(AddCoinAsync)}'. Error Message: '{exception.Message}'", exception);
             }
-
         }
         public decimal GetTotalAmount()
         {
@@ -68,8 +66,7 @@ namespace Coins.Repository
                 throw new Exception($"Exception on '{nameof(GetTotalAmount)}'. Error Message: '{exception.Message}'", exception);
             }
 
-        }
-
+        }  
         public void Reset()
         {
             _logger.Log(LogLevel.Information, "Trying to reset total amount coins");
@@ -82,7 +79,6 @@ namespace Coins.Repository
             {
                 _logger.Log(LogLevel.Information, "Total Amount not found"); 
             }
-        }
-
+        } 
     }
 }

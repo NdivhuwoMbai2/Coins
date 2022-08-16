@@ -5,7 +5,6 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Coins.Controllers
 {
-
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/{version:apiVersion}/[controller]")]
@@ -20,7 +19,6 @@ namespace Coins.Controllers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _coinJar = coinJar ?? throw new ArgumentNullException(nameof(coinJar));
         }
-
         [HttpPost]
         [Route("addCoin")]
         public IActionResult Add(Coin coin)
@@ -36,7 +34,6 @@ namespace Coins.Controllers
                 return StatusCode(500, new { message = "An error occurred while adding a coin" });
             }
         }
-
         [HttpGet]
         [Route("getTotalAmount")]
         public async Task<IActionResult> GetTotalAmount()
